@@ -12,6 +12,6 @@ export default defineNuxtConfig({
   },
   modules: [
     'nuxt-lucide-icons',
-    'nuxt-particles'
+    '@nuxt/icon'
   ],
 })

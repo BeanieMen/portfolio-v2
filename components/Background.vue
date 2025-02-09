@@ -16,11 +16,11 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 
 const boxCount = ref(0)
-const gridHeight = ref(window.innerHeight) // Default to viewport height
+const gridHeight = ref(0) // Initialize to 0
 const backgroundRef = ref(null)
 
 const calculateBoxes = () => {
-  if (!backgroundRef.value) return
+  if (!backgroundRef.value || typeof window === 'undefined') return
 
   const contentHeight = document.body.scrollHeight // Get total page height
   gridHeight.value = Math.max(contentHeight, window.innerHeight) // Ensure grid height matches content
@@ -35,6 +35,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', calculateBoxes)
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', calculateBoxes)
+  }
 })
 </script>
