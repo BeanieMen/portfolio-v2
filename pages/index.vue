@@ -98,6 +98,7 @@ onBeforeUnmount(() => {
   font-style: normal;
   font-weight: 400;
   src: url('@/assets/fonts/Manrope-Regular.woff2') format('woff2');
+  font-display: swap;
 }
 
 @font-face {
@@ -105,6 +106,7 @@ onBeforeUnmount(() => {
   font-style: normal;
   font-weight: 700;
   src: url('@/assets/fonts/Manrope-Bold.woff2') format('woff2');
+  font-display: swap;
 }
 
 .font-manrope {
