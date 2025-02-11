@@ -1,8 +1,6 @@
 <template>
   <div class="w-screen min-h-screen overflow-auto relative bg-[#161616]">
-    <client-only v-if="showLazyBackground">
-      <LazyBackground />
-    </client-only>
+      <Background />
     <div class="mx-5">
       <div class="max-w-2xl relative z-20 w-full mx-auto mt-20">
         <!-- Main Content -->
@@ -55,11 +53,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue';
 
-const showLazyBackground = ref(false);
-const LazyBackground = defineAsyncComponent(() =>
-  import('~/components/Background.vue')
-);
-
 const skills = ref([
   { name: 'TypeScript', icon: 'logos:typescript-icon', url: 'https://www.typescriptlang.org/' },
   { name: 'Nuxt', icon: 'logos:nuxt-icon', url: 'https://nuxt.com/' },
@@ -92,13 +85,6 @@ let interval;
 onMounted(() => {
   updateTime();
   interval = setInterval(updateTime, 1000);
-
-  // Use two successive requestAnimationFrame calls to wait until after the first paint.
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      showLazyBackground.value = true;
-    });
-  });
 });
 
 onBeforeUnmount(() => {
