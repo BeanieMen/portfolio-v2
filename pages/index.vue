@@ -101,7 +101,21 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap');
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url('@/assets/fonts/Manrope-Regular.woff2') format('woff2'),
+       url('@/assets/fonts/Manrope-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url('@/assets/fonts/Manrope-Bold.woff2') format('woff2'),
+       url('@/assets/fonts/Manrope-Bold.woff') format('woff');
+}
 
 .font-manrope {
   font-family: 'Manrope', sans-serif;
