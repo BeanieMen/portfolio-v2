@@ -31,11 +31,11 @@
         <div>
           <h2 class="text-white text-5xl font-manrope font-semibold mb-6">Skills</h2>
           <div class="flex flex-wrap gap-4">
-            <div v-for="skill in skills" :key="skill.name"
-              class="flex items-center gap-1 px-2 py-1 border border-gray-500 rounded-md bg-[#212121] text-white shadow-md">
+            <a v-for="skill in skills" :key="skill.name" :href="skill.url" target="_blank"
+              class="flex items-center gap-1 px-2 py-1 border border-gray-500 rounded-md bg-[#212121] text-white shadow-md hover:bg-[#333333] transition">
               <Icon :name="skill.icon" class="w-5 h-5" />
               <span class="font-manrope">{{ skill.name }}</span>
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -47,21 +47,21 @@
 import { ref } from 'vue';
 
 const skills = ref([
-  { name: 'TypeScript', icon: 'logos:typescript-icon' },
-  { name: 'Nuxt', icon: 'logos:nuxt-icon' },
-  { name: 'Docker', icon: 'logos:docker-icon' },
-  { name: 'CI/CD', icon: 'logos:github-actions' },
-  { name: 'REST APIs', icon: 'logos:rest' },
-  { name: 'Git', icon: 'logos:git-icon' },
-  { name: 'Bash', icon: 'logos:bash-icon' },
-  { name: 'Linux', icon: 'logos:linux-tux' },
-  { name: 'Three.js', icon: 'logos:threejs' },
-  { name: 'DevOps', icon: 'logos:aws' }, // Example for DevOps
-  { name: 'Vitest', icon: 'logos:vitest' },
-  { name: 'WebGL', icon: 'mdi:cube-scan' },
-  { name: 'Oracle', icon: 'simple-icons:oracle' }
+  { name: 'TypeScript', icon: 'logos:typescript-icon', url: 'https://www.typescriptlang.org/' },
+  { name: 'Nuxt', icon: 'logos:nuxt-icon', url: 'https://nuxt.com/' },
+  { name: 'Docker', icon: 'logos:docker-icon', url: 'https://www.docker.com/' },
+  { name: 'CI/CD', icon: 'logos:github-actions', url: 'https://github.com/features/actions' },
+  { name: 'REST APIs', icon: 'logos:rest', url: 'https://restfulapi.net/' },
+  { name: 'Git', icon: 'logos:git-icon', url: 'https://git-scm.com/' },
+  { name: 'Bash', icon: 'logos:bash-icon', url: 'https://www.gnu.org/software/bash/' },
+  { name: 'Linux', icon: 'logos:linux-tux', url: 'https://www.linux.org/' },
+  { name: 'Three.js', icon: 'logos:threejs', url: 'https://threejs.org/' },
+  { name: 'Vitest', icon: 'logos:vitest', url: 'https://vitest.dev/' },
+  { name: 'WebGL', icon: 'mdi:cube-scan', url: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API' },
+  { name: 'Oracle', icon: 'simple-icons:oracle', url: 'https://www.oracle.com/' }
 ]);
 </script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap');
 
