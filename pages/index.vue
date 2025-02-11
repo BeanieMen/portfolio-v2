@@ -29,9 +29,8 @@
               <LucideDownload class="w-5 h-5" />
               <span class="font-semibold">Resume</span>
             </a>
-
             <a href="https://github.com/BeanieMen" target="_blank"
-              class="p-2 bg-white rounded-lg hover:opacity-80 transition">
+              class="p-2 bg-white rounded-lg hover:opacity-80 transition" aria-label="Visit BeanieMen's GitHub profile">
               <LucideGithub class="w-6 h-6 text-black" />
             </a>
           </div>
@@ -147,6 +146,7 @@ onBeforeUnmount(() => {
   0% {
     background-position: 0% center;
   }
+
   100% {
     background-position: -200% center;
   }

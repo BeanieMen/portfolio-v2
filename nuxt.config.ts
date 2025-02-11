@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Beanie's Portfolio",
+      htmlAttrs: {
+        lang: 'en',
+      },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -32,5 +35,4 @@ export default defineNuxtConfig({
     'nuxt-lucide-icons',
     '@nuxt/icon'
   ],
-  
-})
+});
