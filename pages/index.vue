@@ -1,13 +1,12 @@
 <template>
   <div class="w-screen min-h-screen overflow-auto relative">
     <client-only>
-      <Background />
+      <LazyBackground />
     </client-only>
     <div class="mx-5">
       <div class="max-w-2xl relative z-20 w-full mx-auto mt-20">
-
-        <!-- Main -->
-        <div class="flex flex-col items-start mb-20">
+        <!-- Main Content -->
+        <div class="flex flex-col items-start mb-20 relative z-30">
           <span class="text-white text-5xl font-manrope font-bold mb-5">Aarjav Jain</span>
           <span class="text-[#a0a0a0] text-2xl font-manrope mt-1">Infrastructure enthusiast.</span>
           <span class="text-[#a0a0a0] text-2xl font-manrope">
@@ -39,7 +38,7 @@
         </div>
 
         <!-- Skills -->
-        <div>
+        <div class="relative z-30">
           <h2 class="text-white text-5xl font-manrope font-semibold mb-6">Skills</h2>
           <div class="flex flex-wrap gap-4">
             <a v-for="skill in skills" :key="skill.name" :href="skill.url" target="_blank"
@@ -55,7 +54,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue';
+
+// Lazy-load Background component
+const LazyBackground = defineAsyncComponent(() =>
+  import('~/components/Background.vue')
+);
 
 const skills = ref([
   { name: 'TypeScript', icon: 'logos:typescript-icon', url: 'https://www.typescriptlang.org/' },
@@ -114,7 +118,7 @@ onBeforeUnmount(() => {
   left: 0;
   bottom: -4px;
   width: 100%;
-  height: 2px;
+  height: 5px;
   background: linear-gradient(90deg, #8b5cf6, #7c3aed, #6d28d9, #5b21b6, #6d28d9, #7c3aed, #8b5cf6);
   background-size: 200% auto;
   animation: gradientScroll 3s linear infinite;
@@ -124,7 +128,6 @@ onBeforeUnmount(() => {
   0% {
     background-position: 0% center;
   }
-
   100% {
     background-position: -200% center;
   }

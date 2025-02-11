@@ -3,9 +3,8 @@ FROM node:18-alpine
 WORKDIR /app
 COPY .output /app/.output
 
-WORKDIR /app/.output/server
-RUN npm install
+RUN npm install -g serve
 
 EXPOSE 3000
 
-CMD ["node", "/app/.output/server/index.mjs"]
+CMD ["serve", "-s", "/app/.output/public", "-l", "3000"]

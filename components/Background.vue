@@ -1,5 +1,5 @@
 <template>
-  <div ref="backgroundRef" class="absolute inset-0 w-full bg-black">
+  <div ref="backgroundRef" class="absolute inset-0 w-full bg-black z-0">
     <div class="grid grid-cols-10 md:grid-cols-12 w-full" :style="{ height: gridHeight + 'px' }">
       <div
         v-for="n in boxCount"
@@ -13,30 +13,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { useWindowSize } from '@vueuse/core';
 
-const boxCount = ref(0)
-const gridHeight = ref(0)
-const backgroundRef = ref(null)
+const backgroundRef = ref(null);
+const boxCount = ref(0);
+const gridHeight = ref(0);
+
+const { width: windowWidth } = useWindowSize();
+
+const columns = computed(() => (windowWidth.value < 768 ? 10 : 12));
 
 const calculateBoxes = () => {
-  if (!backgroundRef.value || typeof window === 'undefined') return
+  if (!backgroundRef.value || typeof window === 'undefined') return;
+  const contentHeight = document.body.scrollHeight;
+  gridHeight.value = Math.max(contentHeight, window.innerHeight);
+  const boxSize = windowWidth.value / columns.value;
+  const rows = Math.ceil(gridHeight.value / boxSize);
+  boxCount.value = rows * columns.value;
+};
 
-  const contentHeight = document.body.scrollHeight
-  gridHeight.value = Math.max(contentHeight, window.innerHeight) 
-  const boxSize = window.innerWidth / (window.innerWidth < 768 ? 10 : 12)
-  const rows = Math.ceil(gridHeight.value / boxSize)
-  boxCount.value = rows * (window.innerWidth < 768 ? 10 : 12)
-}
+let resizeTimeout;
+const onResize = () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    calculateBoxes();
+  }, 100);
+};
 
 onMounted(() => {
-  nextTick(() => calculateBoxes())
-  window.addEventListener('resize', calculateBoxes)
-})
+  calculateBoxes();
+  window.addEventListener('resize', onResize);
+});
 
 onUnmounted(() => {
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('resize', calculateBoxes)
-  }
-})
+  window.removeEventListener('resize', onResize);
+});
 </script>
