@@ -5,6 +5,7 @@
     </client-only>
     <div class="mx-5">
       <div class="max-w-2xl relative z-20 w-full mx-auto mt-20">
+
         <!-- Main -->
         <div class="flex flex-col items-start mb-20">
           <span class="text-white text-5xl font-manrope font-bold mb-5">Aarjav Jain</span>
@@ -13,7 +14,17 @@
             Working on <a href="https://nexusplay.net" class="animated-underline text-white">@NexusPlay</a>
           </span>
 
-          <div class="flex items-center gap-4 mt-6">
+          <!-- Location and Time -->
+          <div class="flex items-center gap-2 mt-6 text-[#a0a0a0] text-sm font-manrope">
+            <span class="flex flex-row items-center gap-3 text-lg">
+              <LucideMapPin /> Delhi, India
+            </span>
+            <span>•</span>
+            <span class="text-lg">{{ currentTime }}</span>
+          </div>
+
+          <!-- Resume Download Button -->
+          <div class="flex items-center gap-4 mt-4">
             <a href="/resume.pdf" download
               class="flex items-center gap-2 px-4 py-2 border border-white text-white rounded-lg hover:bg-white hover:text-black transition">
               <LucideDownload class="w-5 h-5" />
@@ -44,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const skills = ref([
   { name: 'TypeScript', icon: 'logos:typescript-icon', url: 'https://www.typescriptlang.org/' },
@@ -60,6 +71,29 @@ const skills = ref([
   { name: 'WebGL', icon: 'mdi:cube-scan', url: 'https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API' },
   { name: 'Oracle', icon: 'simple-icons:oracle', url: 'https://www.oracle.com/' }
 ]);
+
+const currentTime = ref('');
+
+const updateTime = () => {
+  const options = {
+    timeZone: 'Asia/Kolkata',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
+  currentTime.value = new Intl.DateTimeFormat('en-US', options).format(new Date());
+};
+
+let interval;
+onMounted(() => {
+  updateTime();
+  interval = setInterval(updateTime, 1000);
+});
+
+onBeforeUnmount(() => {
+  clearInterval(interval);
+});
 </script>
 
 <style>
