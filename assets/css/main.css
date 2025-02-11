@@ -2,15 +2,15 @@
 
 /* For WebKit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* For Firefox */
-html {
-    scrollbar-width: none;
+html, body, div {
+  scrollbar-width: none;
 }
 
 /* For IE and Edge */
 body {
-    -ms-overflow-style: none;
+  -ms-overflow-style: none;
 }
