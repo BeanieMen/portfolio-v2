@@ -1,6 +1,6 @@
 <template>
-  <div class="w-screen min-h-screen overflow-auto relative">
-    <client-only>
+  <div class="w-screen min-h-screen overflow-auto relative bg-[#161616]">
+    <client-only v-if="showLazyBackground">
       <LazyBackground />
     </client-only>
     <div class="mx-5">
@@ -56,7 +56,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, defineAsyncComponent } from 'vue';
 
-// Lazy-load Background component
+const showLazyBackground = ref(false);
 const LazyBackground = defineAsyncComponent(() =>
   import('~/components/Background.vue')
 );
@@ -93,6 +93,13 @@ let interval;
 onMounted(() => {
   updateTime();
   interval = setInterval(updateTime, 1000);
+
+  // Use two successive requestAnimationFrame calls to wait until after the first paint.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      showLazyBackground.value = true;
+    });
+  });
 });
 
 onBeforeUnmount(() => {
@@ -105,14 +112,14 @@ onBeforeUnmount(() => {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 400;
-  src: url('@/assets/fonts/Manrope-Regular.woff2') format('woff2'),
+  src: url('@/assets/fonts/Manrope-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 700;
-  src: url('@/assets/fonts/Manrope-Bold.woff2') format('woff2'),
+  src: url('@/assets/fonts/Manrope-Bold.woff2') format('woff2');
 }
 
 .font-manrope {

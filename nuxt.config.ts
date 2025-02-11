@@ -14,7 +14,6 @@ export default defineNuxtConfig({
           name: 'description',
           content: 'An absolute BANGING portfolio website made with nuxt'
         },
-        // Open Graph meta tags (for social media sharing)
         { property: 'og:title', content: "Beanie's Portfolio" },
         { property: 'og:description', content: 'An absolute BANGING portfolio website made with nuxt' },
         { property: 'og:type', content: 'website' },
