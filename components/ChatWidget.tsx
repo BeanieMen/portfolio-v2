@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MessageSquare, Send } from "lucide-react";
 
 type Role = "system" | "user" | "assistant";
@@ -17,24 +17,16 @@ export default function ChatWidget() {
   const [initialized, setInitialized] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const push = (m: Omit<Msg, "id">) =>
-    setMessages((s) => [...s, { ...m, id: Date.now().toString() + Math.random() }]);
+    setMessages((s) => [
+      ...s,
+      { ...m, id: Date.now().toString() + Math.random() },
+    ]);
 
-  useEffect(() => {
-    if (!open) return;
-    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, open]);
-
-  useEffect(() => {
-    if (open && !initialized) {
-      initConversation();
-    }
-  }, [open]);
-
-  async function initConversation() {
+  const initConversation = useCallback(async () => {
     setInitialized(true);
     const initialMessages: Msg[] = [
       { id: "s", role: "system", content: SYSTEM_PROMPT },
@@ -51,32 +43,65 @@ export default function ChatWidget() {
       });
       const data = await res.json();
       const assistant =
-        data?.choices?.[0]?.message?.content ?? data?.output ?? "Sorry, I couldn't get a reply.";
+        data?.choices?.[0]?.message?.content ??
+        data?.output ??
+        "Sorry, I couldn't get a reply.";
 
       setMessages((prev) => {
         const withoutOptimistic = prev.filter((m) => m.content !== "...");
-        return [...withoutOptimistic, { id: Date.now().toString(), role: "assistant", content: assistant }];
+        return [
+          ...withoutOptimistic,
+          { id: Date.now().toString(), role: "assistant", content: assistant },
+        ];
       });
     } catch (err) {
       setMessages((prev) => {
+        console.error(err);
         const withoutOptimistic = prev.filter((m) => m.content !== "...");
-        return [...withoutOptimistic, { id: Date.now().toString(), role: "assistant", content: "Error contacting the chat service." }];
+        return [
+          ...withoutOptimistic,
+          {
+            id: Date.now().toString(),
+            role: "assistant",
+            content: "Error contacting the chat service.",
+          },
+        ];
       });
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    listRef.current?.scrollTo({
+      top: listRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, open]);
+
+  useEffect(() => {
+    if (open && !initialized) {
+      initConversation();
+    }
+  }, [open, initConversation, initialized]);
 
   async function sendMessage() {
     if (!input.trim()) return;
-    const userMsg: Msg = { id: Date.now().toString(), role: "user", content: input.trim() };
+    const userMsg: Msg = {
+      id: Date.now().toString(),
+      role: "user",
+      content: input.trim(),
+    };
     setInput("");
     push(userMsg);
     setLoading(true);
 
     const history = [
       { role: "system", content: SYSTEM_PROMPT },
-      ...messages.filter((m) => m.role !== "system").map((m) => ({ role: m.role, content: m.content })),
+      ...messages
+        .filter((m) => m.role !== "system")
+        .map((m) => ({ role: m.role, content: m.content })),
       { role: userMsg.role, content: userMsg.content },
     ];
 
@@ -89,16 +114,28 @@ export default function ChatWidget() {
         body: JSON.stringify({ messages: history }),
       });
       const data = await res.json();
-      const assistant = data?.choices?.[0]?.message?.content ?? data?.output ?? "(no reply)";
+      const assistant =
+        data?.choices?.[0]?.message?.content ?? data?.output ?? "(no reply)";
 
       setMessages((prev) => {
         const withoutOptimistic = prev.filter((m) => m.content !== "...");
-        return [...withoutOptimistic, { id: Date.now().toString(), role: "assistant", content: assistant }];
+        return [
+          ...withoutOptimistic,
+          { id: Date.now().toString(), role: "assistant", content: assistant },
+        ];
       });
     } catch (err) {
+      console.error(err);
       setMessages((prev) => {
         const withoutOptimistic = prev.filter((m) => m.content !== "...");
-        return [...withoutOptimistic, { id: Date.now().toString(), role: "assistant", content: "Failed to send message." }];
+        return [
+          ...withoutOptimistic,
+          {
+            id: Date.now().toString(),
+            role: "assistant",
+            content: "Failed to send message.",
+          },
+        ];
       });
     } finally {
       setLoading(false);
@@ -108,7 +145,11 @@ export default function ChatWidget() {
   return (
     <>
       <div className="sm:hidden">
-        <div className={`fixed bottom-0 left-0 right-0 z-50 transition-transform ${open ? "translate-y-0" : "translate-y-full"}`}>
+        <div
+          className={`fixed bottom-0 left-0 right-0 z-50 transition-transform ${
+            open ? "translate-y-0" : "translate-y-full"
+          }`}
+        >
           <div className="bg-[#0f1724] border-t border-gray-700 p-2">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -127,13 +168,25 @@ export default function ChatWidget() {
               </div>
             </div>
 
-            <div className="h-56 bg-[#071021] rounded p-2 overflow-auto" ref={listRef}>
-              {messages.length === 0 && <div className="text-gray-400">Start the chat below</div>}
+            <div
+              className="h-56 bg-[#071021] rounded p-2 overflow-auto"
+              ref={listRef}
+            >
+              {messages.length === 0 && (
+                <div className="text-gray-400">Start the chat below</div>
+              )}
               {messages.map((m) => (
-                <div key={m.id} className={`mb-2 ${m.role === "user" ? "text-right" : "text-left"}`}>
+                <div
+                  key={m.id}
+                  className={`mb-2 ${
+                    m.role === "user" ? "text-right" : "text-left"
+                  }`}
+                >
                   <div
                     className={`inline-block max-w-[85%] px-3 py-1.5 rounded ${
-                      m.role === "user" ? "bg-[#1f2937] text-white" : "bg-[#0b1220] text-gray-200"
+                      m.role === "user"
+                        ? "bg-[#1f2937] text-white"
+                        : "bg-[#0b1220] text-gray-200"
                     }`}
                   >
                     {m.content}
@@ -152,7 +205,10 @@ export default function ChatWidget() {
                 className="flex-1 px-3 py-2 rounded bg-[#0b1220] text-white outline-none"
                 placeholder="Say hi..."
               />
-              <button onClick={sendMessage} className="px-4 py-2 rounded bg-indigo-600 text-white">
+              <button
+                onClick={sendMessage}
+                className="px-4 py-2 rounded bg-indigo-600 text-white"
+              >
                 <Send className="w-4 h-4" />
               </button>
             </div>
@@ -169,7 +225,9 @@ export default function ChatWidget() {
                 <MessageSquare className="w-6 h-6 text-white" />
                 <div className="text-left">
                   <div className="text-white font-medium">Chat with Aarjav</div>
-                  <div className="text-xs text-gray-400">Quick help, powered by a 7B model</div>
+                  <div className="text-xs text-gray-400">
+                    Quick help, powered by a 7B model
+                  </div>
                 </div>
               </div>
               <div className="text-sm text-gray-300">Open</div>
@@ -189,16 +247,34 @@ export default function ChatWidget() {
                   <div className="text-white font-semibold">Chat (7B)</div>
                 </div>
                 <div>
-                  <button onClick={() => setOpen(false)} className="px-2 py-1 text-sm text-gray-300 rounded hover:bg-gray-800">
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="px-2 py-1 text-sm text-gray-300 rounded hover:bg-gray-800"
+                  >
                     Close
                   </button>
                 </div>
               </div>
               <div className="p-3 h-80 overflow-auto" ref={listRef}>
-                {messages.length === 0 && <div className="text-gray-400">Say hi — this starts a conversation with a 7B chat model.</div>}
+                {messages.length === 0 && (
+                  <div className="text-gray-400">
+                    Say hi — this starts a conversation with a 7B chat model.
+                  </div>
+                )}
                 {messages.map((m) => (
-                  <div key={m.id} className={`mb-3 ${m.role === "user" ? "text-right" : "text-left"}`}>
-                    <div className={`inline-block px-3 py-1.5 rounded ${m.role === "user" ? "bg-gray-700 text-white" : "bg-[#06101a] text-gray-200"}`}>
+                  <div
+                    key={m.id}
+                    className={`mb-3 ${
+                      m.role === "user" ? "text-right" : "text-left"
+                    }`}
+                  >
+                    <div
+                      className={`inline-block px-3 py-1.5 rounded ${
+                        m.role === "user"
+                          ? "bg-gray-700 text-white"
+                          : "bg-[#06101a] text-gray-200"
+                      }`}
+                    >
                       {m.content}
                     </div>
                   </div>
@@ -215,7 +291,10 @@ export default function ChatWidget() {
                   className="flex-1 px-3 py-2 rounded bg-[#06101a] text-white outline-none"
                   placeholder="Ask something..."
                 />
-                <button onClick={sendMessage} className="px-3 py-2 rounded bg-indigo-600 text-white">
+                <button
+                  onClick={sendMessage}
+                  className="px-3 py-2 rounded bg-indigo-600 text-white"
+                >
                   <Send className="w-4 h-4" />
                 </button>
               </div>
