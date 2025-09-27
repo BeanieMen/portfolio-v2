@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Background from "@/components/Background";
 import { MapPin, Download, Github } from "lucide-react";
 import { Icon } from "@iconify/react";
+import ChatWidget from "@/components/ChatWidget"; // <-- imported chat widget
 
 const skills = [
   { name: "TypeScript", icon: "logos:typescript-icon", url: "https://www.typescriptlang.org/" },
@@ -53,12 +54,6 @@ export default function Page() {
         <header className="flex flex-col items-start mb-16 lg:mb-20">
           <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-3">Aarjav Jain</h1>
           <p className="text-[#a0a0a0] text-lg sm:text-xl lg:text-2xl mb-2">Infrastructure enthusiast.</p>
-          <p className="text-[#a0a0a0] text-lg sm:text-xl lg:text-2xl mb-6 lg:mb-8">
-            Working on{" "}
-            <a href="https://nexusplay.net" className="underline decoration-purple-500 hover:text-purple-400">
-              @NexusPlay
-            </a>
-          </p>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-[#a0a0a0] text-base sm:text-lg lg:text-xl mb-8 lg:mb-10">
             <span className="flex items-center gap-2">
@@ -107,6 +102,8 @@ export default function Page() {
           </div>
         </section>
       </div>
+
+      <ChatWidget />
     </div>
   );
 }
