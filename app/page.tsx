@@ -4,12 +4,17 @@ import React, { useEffect, useState } from "react";
 import Background from "@/components/Background";
 import { MapPin, Download, Github } from "lucide-react";
 import { Icon } from "@iconify/react";
-import ChatWidget from "@/components/ChatWidget"; // <-- imported chat widget
 
 const skills = [
   { name: "TypeScript", icon: "logos:typescript-icon", url: "https://www.typescriptlang.org/" },
+  { name: "React", icon: "logos:react", url: "https://react.dev/" },
+  { name: "SQL", icon: "logos:postgresql", url: "https://www.postgresql.org/" },
+  { name: "RESTful API", icon: "logos:api-dot-video", url: "https://restfulapi.net/" },
   { name: "Docker", icon: "logos:docker-icon", url: "https://www.docker.com/" },
   { name: "CI/CD", icon: "logos:github-actions", url: "https://github.com/features/actions" },
+  { name: "Deployment", icon: "logos:vercel-icon", url: "https://vercel.com/" },
+  { name: "Infra", icon: "simple-icons:terraform", url: "https://www.terraform.io/" },
+  { name: "DevOps", icon: "logos:kubernetes", url: "https://kubernetes.io/" },
   { name: "Git", icon: "logos:git-icon", url: "https://git-scm.com/" },
   { name: "Linux", icon: "logos:linux-tux", url: "https://www.linux.org/" },
   { name: "Three.js", icon: "logos:threejs", url: "https://threejs.org/" },
@@ -36,24 +41,13 @@ export default function Page() {
     return () => clearInterval(intervalId);
   }, []);
 
-  const downloadResume = async () => {
-    const response = await fetch("/resume.pdf");
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "resume.pdf";
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
-
   return (
     <div className="relative w-screen min-h-screen overflow-x-hidden bg-[#161616] font-manrope">
       <Background />
       <div className="relative z-10 max-w-2xl lg:max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
         <header className="flex flex-col items-start mb-16 lg:mb-20">
           <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-3">Aarjav Jain</h1>
-          <p className="text-[#a0a0a0] text-lg sm:text-xl lg:text-2xl mb-2">Infrastructure enthusiast.</p>
+          <p className="text-[#a0a0a0] text-lg sm:text-xl lg:text-2xl mb-2">Infrastructure and music enthusiast.</p>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-[#a0a0a0] text-base sm:text-lg lg:text-xl mb-8 lg:mb-10">
             <span className="flex items-center gap-2">
@@ -64,14 +58,14 @@ export default function Page() {
           </div>
 
           <div className="flex flex-row items-stretch gap-3 w-full lg:w-auto">
-            <button
-              onClick={downloadResume}
+            <a
+              href="/resume.pdf"
+              download="Aarjav_Jain_Resume.pdf"
               className="flex-grow lg:flex-grow-0 flex items-center justify-center gap-2 px-5 py-2.5 border border-white text-white rounded-lg hover:bg-white hover:text-black transition font-semibold text-base lg:text-lg"
             >
               <Download className="w-5 h-5" />
               <span>Resume</span>
-            </button>
-
+            </a>
             <a
               href="https://github.com/BeanieMen"
               target="_blank"
@@ -103,7 +97,6 @@ export default function Page() {
         </section>
       </div>
 
-      <ChatWidget />
     </div>
   );
 }
