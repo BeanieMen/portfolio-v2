@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const BOX_SIZE = 80;
 const HIGHLIGHT_RADIUS_MULT = 2.5;
@@ -21,8 +21,7 @@ function getIntensity(cursorX: number, cursorY: number, x: number, y: number) {
 
 export default function Background() {
   const [grid, setGrid] = useState({ rows: 0, cols: 0 });
-  const cursorRef = useRef({ x: -1000, y: -1000 });
-  const [, setFrame] = useState(0);
+  const [cursor, setCursor] = useState({ x: -1000, y: -1000 });
 
   useEffect(() => {
     const handleResize = () => setGrid(getGridSize());
@@ -33,20 +32,10 @@ export default function Background() {
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
-      cursorRef.current = { x: e.clientX, y: e.clientY };
+      setCursor({ x: e.clientX, y: e.clientY });
     };
     window.addEventListener("mousemove", handleMove);
     return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
-
-  useEffect(() => {
-    let raf: number;
-    const loop = () => {
-      setFrame((f) => f + 1);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
   }, []);
 
   const boxes = [];
@@ -54,7 +43,7 @@ export default function Background() {
     for (let col = 0; col < grid.cols; col++) {
       const x = col * BOX_SIZE + BOX_SIZE / 2;
       const y = row * BOX_SIZE + BOX_SIZE / 2;
-      const intensity = getIntensity(cursorRef.current.x, cursorRef.current.y, x, y);
+      const intensity = getIntensity(cursor.x, cursor.y, x, y);
 
       boxes.push(
         <div

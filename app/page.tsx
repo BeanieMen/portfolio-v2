@@ -1,12 +1,23 @@
 "use client";
 
-import React from "react";
+import { useEffect, useState } from "react";
 import Background from "@/components/Background";
 import { MapPin, Download } from "lucide-react";
 import { Icon } from "@iconify/react";
-import { useKolkataTime } from "@/hooks/useKolkataTime";
 import { skills, SkillBadge } from "@/components/Skills";
 import Footer from "@/components/Footer";
+
+function formatKolkataTime() {
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: "Asia/Kolkata",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  };
+
+  return new Intl.DateTimeFormat("en-US", options).format(new Date());
+}
 
 function HeroActions() {
   return (
@@ -34,10 +45,19 @@ function HeroActions() {
 
 
 export default function Page() {
-  const currentTime = useKolkataTime();
+  const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    const firstFrame = requestAnimationFrame(() => setCurrentTime(formatKolkataTime()));
+    const intervalId = setInterval(() => setCurrentTime(formatKolkataTime()), 1000);
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      clearInterval(intervalId);
+    };
+  }, []);
 
   return (
-    <div className="relative w-screen min-h-screen overflow-x-hidden bg-background text-foreground pd-[1000px]">
+    <div className="relative w-screen min-h-screen overflow-x-hidden bg-background text-foreground">
       <Background />
       <div className="relative z-10 max-w-2xl lg:max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 pt-32 sm:pb-28 sm:pt-36">
         <header className="flex flex-col items-start mb-16 lg:mb-20">

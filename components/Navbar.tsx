@@ -31,12 +31,7 @@ function IconControl({
 export default function Navbar() {
   const { resolvedTheme, setTheme } = useTheme();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [mounted, setMounted] = useState(false);
   const [playing, setPlaying] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  const isDark = mounted && resolvedTheme === "dark";
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -52,8 +47,7 @@ export default function Navbar() {
   }, []);
 
   function toggleTheme() {
-    if (!mounted) return;
-    setTheme(isDark ? "light" : "dark");
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   }
 
   async function toggleAudio() {
@@ -91,7 +85,12 @@ export default function Navbar() {
             {playing ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
           </IconControl>
           <IconControl onClick={toggleTheme} label="Toggle theme">
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            <span className="block dark:hidden">
+              <Moon className="h-5 w-5" />
+            </span>
+            <span className="hidden dark:block">
+              <Sun className="h-5 w-5" />
+            </span>
           </IconControl>
         </div>
 
