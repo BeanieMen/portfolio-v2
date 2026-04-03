@@ -61,9 +61,9 @@ export default function Page() {
       <IntroCurtain />
       <Background />
       <div className="relative z-10 max-w-2xl lg:max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 pt-32 sm:pb-28 sm:pt-36">
-        <header className="flex flex-col items-start mb-16 lg:mb-20">
+        <header id="about" className="flex flex-col items-start mb-16 lg:mb-20">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-3 tracking-tight">Aarjav Jain</h1>
-          <p className="text-text-muted text-lg sm:text-xl lg:text-2xl mb-2 font-medium">Infrastructure and music enthusiast.</p>
+          <p className="text-text-muted text-lg sm:text-xl lg:text-2xl mb-2 font-medium">Infrastructure and music enthusiast..</p>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-text-muted text-base sm:text-lg mb-8 lg:mb-10">
             <span className="flex items-center gap-2">
@@ -75,7 +75,7 @@ export default function Page() {
           <HeroActions />
         </header>
 
-        <section>
+        <section id="skills">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 lg:mb-8 tracking-tight">Skills</h2>
           <div className="flex flex-wrap gap-3 sm:gap-4">
             {skills.map((skill) => (
@@ -85,7 +85,7 @@ export default function Page() {
         </section>
       </div>
 
-      <div className="relative z-10 mt-4 flex justify-center pb-10">
+      <div id="contact" className="relative z-10 mt-4 flex justify-center pb-10">
         <Footer />
       </div>
     </div>

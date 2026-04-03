@@ -1,37 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { Moon, Sun, Volume2, VolumeX } from "lucide-react";
-import { useTheme } from "next-themes";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { Volume2, VolumeX } from "lucide-react";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
 
 const playlist = ["/music/beleza-pula.mp3"];
 
-function IconControl({
-  onClick,
-  label,
-  children,
-}: {
-  onClick: () => void;
-  label: string;
-  children: ReactNode;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      aria-label={label}
-      className="rounded-xl px-2 py-2 flex items-center justify-center text-[#d0d0c9] transition hover:bg-white/10"
-      type="button"
-    >
-      <span className="flex items-center justify-center">{children}</span>
-    </button>
-  );
-}
-
 export default function Navbar() {
-  const { resolvedTheme, setTheme } = useTheme();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -45,10 +25,6 @@ export default function Navbar() {
     audio.addEventListener("ended", onEnded);
     return () => audio.removeEventListener("ended", onEnded);
   }, []);
-
-  function toggleTheme() {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
-  }
 
   async function toggleAudio() {
     if (!audioRef.current) return;
@@ -67,41 +43,93 @@ export default function Navbar() {
     }
   }
 
+  function handleSpeakerMouseMove(event: MouseEvent<HTMLButtonElement>) {
+    setShowTooltip(true);
+    setTooltipPosition({ x: event.clientX + 14, y: event.clientY - 36 });
+  }
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 p-3 flex w-full justify-center bg-gradient-to-b from-[#111617]/94 via-[#0f1415]/85 to-transparent backdrop-blur-sm border-b border-transparent [border-image:linear-gradient(to_right,transparent,#3a3c3a,#3a3c3a,transparent)_1]">
-      <div className=" w-full px-1 sm:px-2 md:px-3 lg:px-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 px-3 py-2 border border-[#313533] rounded-3xl text-[#e2e4dc]">
-          <span className="w-3 h-3 sm:w-4 sm:h-4 rounded-3xl bg-[#e2e4dc]" />
-          <Link href="/" className="text-sm sm:text-lg">
-            Beanie
-          </Link>
-        </div>
-
-        <div className="flex items-center border border-[#313533] rounded-3xl px-3 py-2 gap-2 text-[#d0d0c9]">
-          <Link href="#blogs" className="px-2 py-1 text-base rounded-lg transition hover:text-white">
-            Blogs
-          </Link>
-          <IconControl onClick={toggleAudio} label="Toggle music">
-            {playing ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-          </IconControl>
-          <IconControl onClick={toggleTheme} label="Toggle theme">
-            <span className="block dark:hidden">
-              <Moon className="h-5 w-5" />
-            </span>
-            <span className="hidden dark:block">
-              <Sun className="h-5 w-5" />
-            </span>
-          </IconControl>
-        </div>
-
-        <Link
-          href="#contact"
-          className="flex items-center gap-1 border border-[#313533] rounded-3xl px-4 py-2 text-[#e2e4dc] text-base transition hover:text-white"
+    <header className="fixed left-1/2 top-10 z-[120] w-full -translate-x-1/2 px-3 md:w-auto md:px-0">
+      <nav className="relative">
+        <ul
+          className="relative mx-auto grid w-full max-w-3xl grid-cols-4 items-center rounded-full border border-foreground/20 bg-panel/80 px-1 py-2.5 shadow-lg backdrop-blur-md md:mx-0 md:w-auto"
+          onMouseLeave={() => setActiveIndex(0)}
         >
-          Contact Me
-        </Link>
-      </div>
+          <div
+            className="pointer-events-none absolute top-1.5 bottom-1.5 rounded-full bg-foreground/10 transition-all duration-300 ease-in-out"
+            style={{ width: "calc(25% - 0.5rem)", left: `calc(${activeIndex * 25}% + 0.25rem)` }}
+            aria-hidden="true"
+          />
+
+          <li className="relative z-10 text-center">
+            <Link
+              href="/"
+              onMouseEnter={() => setActiveIndex(0)}
+              onFocus={() => setActiveIndex(0)}
+              className="block rounded-full px-2 py-2.5 text-sm text-text-muted transition-colors duration-200 hover:text-foreground md:px-4 md:text-base"
+            >
+              Home
+            </Link>
+          </li>
+
+          <li className="relative z-10 text-center">
+            <a
+              href="https://github.com/BeanieMen"
+              target="_blank"
+              rel="noreferrer"
+              onMouseEnter={() => setActiveIndex(1)}
+              onFocus={() => setActiveIndex(1)}
+              className="block rounded-full px-2 py-2.5 text-sm text-text-muted transition-colors duration-200 hover:text-foreground md:px-4 md:text-base"
+            >
+              Projects
+            </a>
+          </li>
+
+          <li className="relative z-10 text-center">
+            <Link
+              href="#about"
+              onMouseEnter={() => setActiveIndex(2)}
+              onFocus={() => setActiveIndex(2)}
+              className="block rounded-full px-2 py-2.5 text-sm text-text-muted transition-colors duration-200 hover:text-foreground md:px-4 md:text-base"
+            >
+              About Me
+            </Link>
+          </li>
+
+          <li className="relative z-10 flex justify-center">
+            <button
+              type="button"
+              onFocus={() => {
+                setActiveIndex(3);
+                setShowTooltip(true);
+              }}
+              onMouseEnter={() => {
+                setActiveIndex(3);
+                setShowTooltip(true);
+              }}
+              onMouseMove={handleSpeakerMouseMove}
+              onMouseLeave={() => setShowTooltip(false)}
+              onBlur={() => setShowTooltip(false)}
+              onClick={toggleAudio}
+              aria-label="Toggle music"
+              className="rounded-full px-2 py-2.5 text-text-muted transition-colors duration-200 hover:text-foreground"
+            >
+              {playing ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      {showTooltip && (
+        <div
+          className="pointer-events-none fixed z-[140] rounded-md border border-foreground/20 bg-panel px-2 py-1 text-xs text-foreground shadow-md backdrop-blur-sm"
+          style={{ left: tooltipPosition.x, top: tooltipPosition.y }}
+        >
+          listen to my playlist
+        </div>
+      )}
+
       <audio ref={audioRef} src={playlist[0]} preload="none" />
-    </nav>
+    </header>
   );
 }

@@ -1,16 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f4ef;
-  --foreground: #11181a;
-  --panel: rgba(244, 247, 240, 0.88);
-  --panel-border: rgba(17, 24, 26, 0.22);
-  --text-muted: #51606a;
-  --chip-bg: #e3e5e0;
-  --chip-border: #c2c8c0;
-}
-
-.dark {
+  color-scheme: dark;
   --background: #121617;
   --foreground: #eaf4ef;
   --panel: rgba(18, 24, 25, 0.84);

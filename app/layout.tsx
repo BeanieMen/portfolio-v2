@@ -1,7 +1,6 @@
 import "./globals.css";
 import { ReactNode } from "react";
 import { Hanken_Grotesk } from "next/font/google";
-import ThemeProvider from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
@@ -18,14 +17,12 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${hankenGrotesk.variable} bg-background text-foreground antialiased`}>
-        <ThemeProvider>
-          <SmoothScrollProvider>
-            <Navbar />
-            {children}
-          </SmoothScrollProvider>
-        </ThemeProvider>
+    <html lang="en" className="dark">
+      <body className={`${hankenGrotesk.variable} bg-background text-foreground antialiased`}>
+        <SmoothScrollProvider>
+          <Navbar />
+          {children}
+        </SmoothScrollProvider>
       </body>
     </html>
   );
