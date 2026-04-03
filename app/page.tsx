@@ -6,6 +6,7 @@ import { MapPin, Download } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { skills, SkillBadge } from "@/components/Skills";
 import Footer from "@/components/Footer";
+import IntroCurtain from "@/components/IntroCurtain";
 
 function formatKolkataTime() {
   const options: Intl.DateTimeFormatOptions = {
@@ -43,7 +44,6 @@ function HeroActions() {
   );
 }
 
-
 export default function Page() {
   const [currentTime, setCurrentTime] = useState("");
 
@@ -58,6 +58,7 @@ export default function Page() {
 
   return (
     <div className="relative w-screen min-h-screen overflow-x-hidden bg-background text-foreground">
+      <IntroCurtain />
       <Background />
       <div className="relative z-10 max-w-2xl lg:max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 pt-32 sm:pb-28 sm:pt-36">
         <header className="flex flex-col items-start mb-16 lg:mb-20">
