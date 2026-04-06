@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import Background from "@/components/Background";
-import { MapPin, Download, Github } from "lucide-react";
+import GitHubSection from "@/components/GitHubSection";
+import { MapPin, Download, Github, BookOpen } from "lucide-react";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
 
 const skills = [
   { name: "TypeScript", icon: "logos:typescript-icon", url: "https://www.typescriptlang.org/" },
@@ -78,7 +80,7 @@ export default function Page() {
           </div>
         </header>
 
-        <section>
+        <section className="mb-16 lg:mb-20">
           <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 lg:mb-8">Skills</h2>
           <div className="flex flex-wrap gap-3 sm:gap-4">
             {skills.map((skill) => (
@@ -94,6 +96,32 @@ export default function Page() {
               </a>
             ))}
           </div>
+        </section>
+
+        <GitHubSection />
+
+        <section>
+          <div className="flex items-center gap-3 mb-6 lg:mb-8">
+            <BookOpen className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
+            <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-semibold">
+              Blog
+            </h2>
+            <Link
+              href="/blog"
+              className="ml-auto text-[#a0a0a0] text-sm hover:text-white transition text-nowrap"
+            >
+              All posts →
+            </Link>
+          </div>
+          <p className="text-[#a0a0a0] text-base sm:text-lg">
+            Writing about infrastructure, software, and the things I build.
+          </p>
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 border border-white text-white rounded-lg hover:bg-white hover:text-black transition font-semibold text-base"
+          >
+            Read the blog
+          </Link>
         </section>
       </div>
 
