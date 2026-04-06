@@ -163,6 +163,9 @@ export default function GitHubSection() {
                   return (
                     <div
                       key={lang}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`${lang}: ${pct}%`}
                       className="relative h-full cursor-pointer transition-opacity duration-150"
                       style={{
                         width: `${pct}%`,
@@ -171,6 +174,8 @@ export default function GitHubSection() {
                       }}
                       onMouseEnter={() => setHoveredLang(lang)}
                       onMouseLeave={() => setHoveredLang(null)}
+                      onFocus={() => setHoveredLang(lang)}
+                      onBlur={() => setHoveredLang(null)}
                     />
                   );
                 })}
@@ -182,6 +187,7 @@ export default function GitHubSection() {
                   return (
                     <span
                       key={lang}
+                      tabIndex={0}
                       className="flex items-center gap-1.5 text-xs text-[#a0a0a0] cursor-default transition-colors duration-150"
                       style={{
                         color:
@@ -189,6 +195,8 @@ export default function GitHubSection() {
                       }}
                       onMouseEnter={() => setHoveredLang(lang)}
                       onMouseLeave={() => setHoveredLang(null)}
+                      onFocus={() => setHoveredLang(lang)}
+                      onBlur={() => setHoveredLang(null)}
                     >
                       <span
                         className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0"

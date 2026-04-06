@@ -3,6 +3,14 @@
 import { useRouter } from "next/navigation";
 import type { Post } from "@/lib/posts";
 
+type ViewTransitionDocument = Document & {
+  startViewTransition: (callback: () => void) => void;
+};
+
+function hasViewTransition(doc: Document): doc is ViewTransitionDocument {
+  return "startViewTransition" in doc;
+}
+
 function slugToTransitionName(slug: string, word: string, idx: number): string {
   const safe = word.toLowerCase().replace(/[^a-z0-9-_]/g, "");
   return `${slug.replace(/[^a-z0-9-_]/g, "-")}__${safe}__${idx}`;
@@ -15,8 +23,8 @@ export default function BlogCard({ post }: { post: Omit<Post, "content"> }) {
   function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
     e.preventDefault();
     const target = `/blog/${post.slug}`;
-    if (typeof document !== "undefined" && "startViewTransition" in document) {
-      (document as Document & { startViewTransition: (cb: () => void) => void }).startViewTransition(() => router.push(target));
+    if (typeof document !== "undefined" && hasViewTransition(document)) {
+      document.startViewTransition(() => router.push(target));
     } else {
       router.push(target);
     }
