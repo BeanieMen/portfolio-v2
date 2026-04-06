@@ -22,24 +22,38 @@ const introGreetings: IntroGreeting[] = [
 const introStepDurations = [1300, 125, 125, 125, 180, 180, 220];
 const curtainLiftDelayMs = 550;
 const curtainLiftDurationMs = 600;
+let hasCompletedIntroThisPageLoad = false;
 
 const cjkFontFamily =
   '"Noto Sans CJK SC", "Noto Sans CJK KR", "Noto Sans CJK JP", "Noto Sans SC", "Noto Sans KR", "Noto Sans JP", sans-serif';
 const hindiFontFamily = '"FreeSerif", serif';
 
 export default function IntroCurtain() {
+  const [shouldPlayIntro] = useState(() => !hasCompletedIntroThisPageLoad);
   const [index, setIndex] = useState(0);
   const [isLifting, setIsLifting] = useState(false);
-  const [isDone, setIsDone] = useState(false);
-  const [isFirstWordVisible, setIsFirstWordVisible] = useState(false);
+  const [isDone, setIsDone] = useState(() => hasCompletedIntroThisPageLoad);
+  const [isFirstWordVisible, setIsFirstWordVisible] = useState(() => hasCompletedIntroThisPageLoad);
 
   useEffect(() => {
+    if (!shouldPlayIntro || !isDone) {
+      return;
+    }
+
+    hasCompletedIntroThisPageLoad = true;
+  }, [isDone, shouldPlayIntro]);
+
+  useEffect(() => {
+    if (!shouldPlayIntro) {
+      return;
+    }
+
     const frameId = requestAnimationFrame(() => setIsFirstWordVisible(true));
     return () => cancelAnimationFrame(frameId);
-  }, []);
+  }, [shouldPlayIntro]);
 
   useEffect(() => {
-    if (isLifting || isDone) {
+    if (!shouldPlayIntro || isLifting || isDone) {
       return;
     }
 
@@ -56,10 +70,10 @@ export default function IntroCurtain() {
     }, curtainLiftDelayMs);
 
     return () => clearTimeout(startLiftTimeout);
-  }, [index, isLifting, isDone]);
+  }, [index, isLifting, isDone, shouldPlayIntro]);
 
   useEffect(() => {
-    if (!isLifting) {
+    if (!shouldPlayIntro || !isLifting) {
       return;
     }
 
@@ -68,10 +82,10 @@ export default function IntroCurtain() {
     }, curtainLiftDurationMs + 30);
 
     return () => clearTimeout(finishTimeout);
-  }, [isLifting]);
+  }, [isLifting, shouldPlayIntro]);
 
   useEffect(() => {
-    if (isDone) {
+    if (!shouldPlayIntro || isDone) {
       return;
     }
 
@@ -88,17 +102,17 @@ export default function IntroCurtain() {
       html.style.overflow = previousHtmlOverflow;
       body.style.overflow = previousBodyOverflow;
     };
-  }, [isDone]);
+  }, [isDone, shouldPlayIntro]);
 
   return (
     <AnimatePresence>
-      {!isDone && (
+      {shouldPlayIntro && !isDone && (
         <motion.div
           initial={{ y: 0 }}
           animate={{ y: isLifting ? "-105%" : 0 }}
           exit={{ y: "-120%" }}
           transition={{ duration: curtainLiftDurationMs / 1000, ease: "easeInOut" }}
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-background text-foreground"
+          className="fixed inset-0 z-200 flex items-center justify-center bg-background text-foreground"
           aria-live="polite"
           aria-label="Intro greetings animation"
         >

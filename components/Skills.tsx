@@ -9,6 +9,8 @@ type Skill = {
 export const skills: Skill[] = [
   { name: "TypeScript", icon: "logos:typescript-icon", url: "https://www.typescriptlang.org/" },
   { name: "React", icon: "logos:react", url: "https://react.dev/" },
+  { name: "Go", icon: "logos:go", url: "https://go.dev/" },
+  { name: "C", icon: "simple-icons:c", url: "https://en.wikipedia.org/wiki/C_(programming_language)" },
   { name: "SQL", icon: "logos:postgresql", url: "https://www.postgresql.org/" },
   { name: "RESTful API", icon: "logos:api-dot-video", url: "https://restfulapi.net/" },
   { name: "Docker", icon: "logos:docker-icon", url: "https://www.docker.com/" },

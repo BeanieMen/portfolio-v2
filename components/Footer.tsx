@@ -4,8 +4,9 @@ import { ArrowUpRight } from "lucide-react";
 
 const exploreLinks = [
     { label: "Home", href: "/" },
-    { label: "About Me", href: "#" },
-    { label: "Contact", href: "#contact" },
+    { label: "Blog", href: "/blog" },
+    { label: "About Me", href: "/#about" },
+    { label: "Contact", href: "/#contact" },
 ];
 
 const socialLinks = [
@@ -72,7 +73,7 @@ export default function Footer() {
 
                     <div className="w-full">
                         <div className="grid w-full max-w-xl ml-auto grid-cols-1 gap-3">
-                            <FooterAction title="Contact Me" subtitle="Heya :3" href="#contact" />
+                            <FooterAction title="Contact Me" subtitle="Heya :3" href="/#contact" />
                             <FooterAction title="My Projects" subtitle="Stuffz" href="https://github.com/BeanieMen" />
                         </div>
                     </div>

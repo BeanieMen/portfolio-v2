@@ -2,6 +2,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { Hanken_Grotesk } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import RouteEffects from "@/components/RouteEffects";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -21,7 +22,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className={`${hankenGrotesk.variable} bg-background text-foreground antialiased`}>
         <SmoothScrollProvider>
           <Navbar />
-          {children}
+          <RouteEffects />
+          <main className="pt-24 sm:pt-28">{children}</main>
         </SmoothScrollProvider>
       </body>
     </html>
